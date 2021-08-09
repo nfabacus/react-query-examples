@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import {QueryCache, QueryClient, QueryClientProvider} from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import SideNav from "./components/SideNav";
+import Home from "./pages/Home";
+import Posts from "./pages/Posts";
+import Users from "./pages/Users";
+
+const queryClient = new QueryClient({
+  options: {
+    queryCache: QueryCache
+  }
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="d-flex vh-100">
+          <SideNav />
+          <div className="p-5">
+            <Switch>
+              <Route path="/posts">
+                <Posts />
+              </Route>
+              <Route path="/users">
+                <Users />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </Router>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 
